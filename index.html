@@ -66,19 +66,24 @@
 	    <script>
 			$(document).ready(function(){
 
+				function hideScreens() {
+         			$(".content").hide();
+        		}
+				hideScreens();
+				$("#home").show();
+
 		      	var url = "https://data.cityofchicago.org/resource/cdmx-wzbz.json";
 
-			      $.get(url, function(response) {
-			          //console.log(response);
+			    $.get(url, function(response) {
+			        //console.log(response);
+			        var data = response;
 
-			          var data = response;
+			        $.each(data, function(i,v){
+			          	console.log(i,v);
 
-			          $.each(data, function(i,v){
-			            console.log(i,v);
-
-			            // clone card
-			            var clone = $(".template").clone();
-			            // update values
+			          	// clone card
+			          	var clone = $(".template").clone();
+		              	// update values
 			            clone.find(".card-title").text(v.street_address);
 
 			            clone.find(".card-title").addClass(v.status);
@@ -94,10 +99,15 @@
 			            }*/
 			            clone.removeClass("template")
 			            // insert into DOM
-			            $("body").append(clone);
+			            $("#list").append(clone);
+			         });
+			    });
 
-			          });
-			      });
+			    $(".nav-link").on("click", function(){
+		        	hideScreens();
+		          	var target = $(this).attr("href");
+		          	$(target).show();
+        		});
 		    });
 		</script>
 		
