@@ -7,6 +7,15 @@
     	<title>title</title>
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	 	crossorigin="anonymous">
+		
+
+		<style>
+			.template {
+				display: none;
+			}
+		    .Completed {color: green;}
+		    .Open {color: red;}
+		</style>
 
   	</head>
   	<body>
@@ -24,23 +33,87 @@
 		          <a class="nav-link" href="#list">List</a>
 		        </li>
 		        <li class="nav-item">
-		          <a class="nav-link" href="#detail">Map<s/a>
+		          <a class="nav-link" href="#map">Map</a>
 		        </li>
 		      </ul>
 		    </div>
   		</nav>
+		<div class="content" id="home">
+	  	  	<h4>Add a Note</h1>
+  	  		<input type="text" id="subject" placeholder="Enter a subject"><br>
+	  	</div>
+	  	<div class="content" id="list">
+	  		<div class="card template" style="width: 18rem;">
+				<div class="card-body">
+					<h5 class="card-title">Card title</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					<a href="#" class="card-link">Card link</a>
+					<a href="#" class="card-link">Another link</a>
+				</div>
+			</div>
+	  	</div>
+	  	<div class="content" id="map"></div> 
+
+		
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	      
+	    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
 
 
+	    <script>
+			$(document).ready(function(){
 
+		      	var url = "https://data.cityofchicago.org/resource/cdmx-wzbz.json";
 
+			      $.get(url, function(response) {
+			          //console.log(response);
 
+			          var data = response;
+
+			          $.each(data, function(i,v){
+			            console.log(i,v);
+
+			            // clone card
+			            var clone = $(".template").clone();
+			            // update values
+			            clone.find(".card-title").text(v.street_address);
+
+			            clone.find(".card-title").addClass(v.status);
+
+			            /*clone.find(".card-title").attr("data-results", v.results);
+
+			            clone.find(".card-subtitle").text(v.facility_type);
+			            
+			            if (v.violations) {
+			              //clone.find(".card-text").text(v.violations);
+			            } else {
+			              clone.find(".card-text").text("")
+			            }*/
+			            clone.removeClass("template")
+			            // insert into DOM
+			            $("body").append(clone);
+
+			          });
+			      });
+		    });
+		</script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+	 crossorigin="anonymous">
+
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+	 crossorigin="anonymous">
 		<script>
-	        // register the service worker for offline use
-	        if('serviceWorker' in navigator) {
-	          navigator.serviceWorker
-	                   .register('./sw.js')
-	                   .then(function() { console.log("Service Worker Registered"); });
-	        }
-    	</script>
+		    // register the service worker for offline use
+		    if('serviceWorker' in navigator) {
+		      navigator.serviceWorker
+		               .register('./sw.js')
+		               .then(function() { console.log("Service Worker Registered"); });
+		    }
+	    </script>
   	</body>
 </html>
