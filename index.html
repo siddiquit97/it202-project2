@@ -4,7 +4,7 @@
     	<meta charset="UTF-8">
     	<link rel='manifest' href='./manifest.json'>
     	<meta name="viewport" content="width=device-width,initial-scale=1">
-    	<title>title</title>
+    	<title>Graffiti Removal</title>
     	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	 	crossorigin="anonymous">
 		
@@ -13,8 +13,14 @@
 			.template {
 				display: none;
 			}
+
 		    .Completed {color: green;}
 		    .Open {color: red;}
+
+		    #map {
+		    	height: 500px;  /* The height is 400 pixels */
+        		width: 100%;
+        	}
 		</style>
 
   	</head>
@@ -38,6 +44,8 @@
 		      </ul>
 		    </div>
   		</nav>
+
+
 		<div class="content" id="home">
 	  	  	<h4>Add a Note</h1>
   	  		<input type="text" id="subject" placeholder="Enter a subject"><br>
@@ -46,10 +54,12 @@
 	  		<div class="card template" style="width: 18rem;">
 				<div class="card-body">
 					<h5 class="card-title">Card title</h5>
-					<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					<a href="#" class="card-link">Card link</a>
-					<a href="#" class="card-link">Another link</a>
+					<h6 class="card-subtitle mb-2 text-muted" id="service_request">Card subtitle</h6>
+					<h6 class="card-subtitle mb-2 text-muted" id="graffiti_located">Card subtitle</h6>
+					<h6 class="card-subtitle mb-2 text-muted" id="surface">Card subtitle</h6>
+					<h6 class="card-subtitle mb-2 text-muted" id="date">Card subtitle</h6>
+					<h6 class="card-subtitle mb-2 text-muted" id="status">Card subtitle</h6>
+					<h6 class="card-subtitle mb-2 text-muted" id="completion_date">Card subtitle</h6>		
 				</div>
 			</div>
 	  	</div>
@@ -79,7 +89,7 @@
 			        var data = response;
 
 			        $.each(data, function(i,v){
-			          	console.log(i,v);
+			          	//console.log(i,v);
 
 			          	// clone card
 			          	var clone = $(".template").clone();
@@ -88,6 +98,17 @@
 
 			            clone.find(".card-title").addClass(v.status);
 
+			            clone.find("#service_request").text(v.service_request_number);
+			            clone.find("#graffiti_located").text(v.where_is_the_graffiti_located_);
+			            clone.find("#surface").text(v.what_type_of_surface_is_the_graffiti_on_);
+			            clone.find("#date").text(v.creation_date);
+			            clone.find("#status").text(v.status);
+			            if (v.completion_date) {
+			            	clone.find("#completion_date").text(v.completion_date);
+			            } else {
+			            	clone.find("#completion_date").text("N/A");
+			            }
+			            
 			            /*clone.find(".card-title").attr("data-results", v.results);
 
 			            clone.find(".card-subtitle").text(v.facility_type);
@@ -108,13 +129,27 @@
 		          	var target = $(this).attr("href");
 		          	$(target).show();
         		});
+
+
 		    });
 		</script>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-	 crossorigin="anonymous">
+	 	crossorigin="anonymous">
 
-	</script>
+		</script>
+		<script>
+	      var map;
+	      function initMap() {
+	        map = new google.maps.Map(document.getElementById('map'), {
+	          center: {lat: -34.397, lng: 150.644},
+	          zoom: 8
+	        });
+	      }
+	    </script>
+	    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa4dMSOASs_iLQnhrPoQ8EZgj2Im_pZ7o&callback=initMap"
+	    async defer></script>
+
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
 	 crossorigin="anonymous">
 		<script>
