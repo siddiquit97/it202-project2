@@ -81,9 +81,10 @@
 
 
 	    <script>
+	    	var ward_text = "";
+			var status_text = "";
 			$(document).ready(function(){
-				var ward_text = "";
-				var status_text = "";
+				
 
 				function hideScreens() {
          			$(".content").hide();
@@ -149,6 +150,7 @@
 		          	console.log(status_text);
 		          	showCards(status_text);
 		          	hideScreens();
+		          	initMap();
 		          	$("#list").show();
 		        });
 
@@ -162,9 +164,22 @@
 		        // The map, centered at Uluru
 		        var map = new google.maps.Map(
 		            document.getElementById('map'), { zoom: 11, center: chicago });
-		        $.get("https://data.cityofchicago.org/resource/cdmx-wzbz.json",
+
+		        var url;
+		      		if(ward_text === "" && status_text === "") {
+		      			url = "https://data.cityofchicago.org/resource/cdmx-wzbz.json";
+		      		} else if (ward_text === "") {
+		      			url = "https://data.cityofchicago.org/resource/cdmx-wzbz.json?"+"status=" + status_text;
+		      		} else if (status_text === "") {
+		      			url = "https://data.cityofchicago.org/resource/cdmx-wzbz.json?"+"ward=" + ward_text;
+		      		} else {
+		      			url = "https://data.cityofchicago.org/resource/cdmx-wzbz.json?"+"status=" + status_text + "&ward=" + ward_text;
+		      		}
+
+		        $.get(url,
 		            function (response) {
 		                console.log("in data callback");
+		                console.log("response");
 		                var data = response;
 		                createMarkers(map, data);
 		            });
