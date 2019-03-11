@@ -21,6 +21,54 @@
 		    	height: 500px;  /* The height is 400 pixels */
         		width: 100%;
         	}
+
+        	body {
+				background: #1488CC;  /* fallback for old browsers */
+				background: linear-gradient(to right, #2980b9, #2B32B2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+			}
+
+			#home {
+				width: 600px;
+				margin: 100px auto;
+				background-color: #2980b9;
+				box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+			}
+
+			#saveButton {
+			display: flex;
+ 			align-items: center;
+  			justify-content: center;
+  			padding-bottom: 8px;
+			}
+
+			h4 {
+				text-align: center;
+				color:white;
+			}
+
+			.nav-link, .navbar-light, .navbar-brand {
+				color: black !important;
+			}
+
+			#ward_text, #status_text {
+				width: 100%;
+			}
+
+			.card {
+		        margin: 0 auto; /* Added */
+		        float: none; /* Added */
+		        margin-bottom: 10px; /* Added */
+		        background-color: #f8f9fa!important;
+			}
+			
+			#about {
+				color:white;
+				text-align: center;
+			}
+
+			#github_link {
+				color:white !important;
+			}
 		</style>
 
   	</head>
@@ -41,13 +89,16 @@
 		        <li class="nav-item">
 		          <a class="nav-link" href="#map">Map</a>
 		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" href="#about">About</a>
+		        </li>
 		      </ul>
 		    </div>
   		</nav>
 
 
 		<div class="content" id="home">
-	  	  	<h4>Add a Note</h1>
+	  	  	<h4>Search for Graffiti</h1>
   	  		<input type="text" id="ward_text" placeholder="Enter Ward"><br>
   	  		<select name="status" id="status_text">
   	  			<option value="Open">Open</option>
@@ -71,6 +122,13 @@
 			</div>
 	  	</div>
 	  	<div class="content" id="map"></div> 
+	  	<div class="content" id="about">
+	  		<h2>About this App</h5>
+	  		<br>
+			<h5>Name: Griffiti Finder</h5>
+			<h5>Developer: Talha Siddiqui</h5>
+			<h5>Github Repo: <span><a id="github_link" href="https://github.com/siddiquit97/it202-project2">https://github.com/siddiquit97/it202-project2</a></span></h5>
+	  	</div>
 
 		
 
@@ -83,16 +141,16 @@
 	    <script>
 	    	var ward_text = "";
 			var status_text = "";
+
 			$(document).ready(function(){
-				
 
 				function hideScreens() {
          			$(".content").hide();
         		}
+
 				hideScreens();
 				$("#home").show();
 
-		      	
 		      	function showCards() {
 		      		var url;
 		      		if(ward_text === "" && status_text === "") {
@@ -106,35 +164,35 @@
 		      		}
 		      		console.log(url);
 		      		$.get(url, function(response) {
-			        //console.log(response);
-			        var data = response;
+				        //console.log(response);
+				        var data = response;
 
-			        $.each(data, function(i,v){
-			          	//console.log(i,v);
+				        $.each(data, function(i,v){
+				          	//console.log(i,v);
 
-			          	// clone card
-			          	var clone = $(".template").clone();
-		              	// update values
-			            clone.find(".card-title").text(v.street_address);
+				          	// clone card
+				          	var clone = $(".template").clone();
+			              	// update values
+				            clone.find(".card-title").text(v.street_address);
 
-			            clone.find(".card-title").addClass(v.status);
+				            clone.find(".card-title").addClass(v.status);
 
-			            clone.find("#service_request").text(v.service_request_number);
-			            clone.find("#ward_card").text(v.ward);
-			            clone.find("#graffiti_located").text(v.where_is_the_graffiti_located_);
-			            clone.find("#surface").text(v.what_type_of_surface_is_the_graffiti_on_);
-			            clone.find("#date").text(v.creation_date);
-			            clone.find("#status").text(v.status);
-			            if (v.completion_date) {
-			            	clone.find("#completion_date").text(v.completion_date);
-			            } else {
-			            	clone.find("#completion_date").text("N/A");
-			            }
-			            clone.removeClass("template")
-			            // insert into DOM
-			            $(".test").append(clone);
-			         });
-			    });
+				            clone.find("#service_request").text(v.service_request_number);
+				            clone.find("#ward_card").text(v.ward);
+				            clone.find("#graffiti_located").text(v.where_is_the_graffiti_located_);
+				            clone.find("#surface").text(v.what_type_of_surface_is_the_graffiti_on_);
+				            clone.find("#date").text(v.creation_date);
+				            clone.find("#status").text(v.status);
+				            if (v.completion_date) {
+				            	clone.find("#completion_date").text(v.completion_date);
+				            } else {
+				            	clone.find("#completion_date").text("N/A");
+				            }
+				            clone.removeClass("template")
+				            // insert into DOM
+				            $(".test").append(clone);
+				        });
+			    	});
 		      	}
 			    
 			    $(".nav-link").on("click", function(){
@@ -153,8 +211,6 @@
 		          	initMap();
 		          	$("#list").show();
 		        });
-
-
 		    });
 
 		    // Initialize and add the map
@@ -187,6 +243,7 @@
 
 		    function createMarkers(map, data) {
 		        //console.log(data);
+
 		        $.each(data, function (i, v) {
 		            var location = { lat: parseFloat(v.latitude), lng: parseFloat(v.longitude) }
 		            var marker = new google.maps.Marker({ position: location, map: map });
